@@ -1,14 +1,16 @@
-const CACHE = 'pwa-demo-v1.0.1';
+const CACHE = 'barber-demo-v1.0.3';
 const ASSETS = [
   './',
   './index.html',
   './manifest.webmanifest',
-  './icons/icon-192.png',
-  './icons/icon-512.png'
+  './icon-192.png',
+  './icon-512.png'
 ];
 
 self.addEventListener('install', (event) => {
-  event.waitUntil(caches.open(CACHE).then(cache => cache.addAll(ASSETS)));
+  event.waitUntil(
+    caches.open(CACHE).then(cache => cache.addAll(ASSETS))
+  );
   self.skipWaiting();
 });
 
@@ -19,6 +21,19 @@ self.addEventListener('activate', (event) => {
     )
   );
   self.clients.claim();
+});
+
+self.addEventListener('fetch', (event) => {
+  const { request } = event;
+  if (request.method !== 'GET') return;
+
+  event.respondWith(
+    caches.match(request).then(cached =>
+      cached || fetch(request).then(response => {
+        return response;
+      }).catch(() => cached)
+    )
+  );
 });
 
 self.addEventListener('fetch', (event) => {
