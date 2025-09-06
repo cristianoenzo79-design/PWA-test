@@ -3,57 +3,49 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>PWA Demo</title>
+  <title>Prenotazioni Barber</title>
   <link rel="manifest" href="manifest.webmanifest">
-  <meta name="theme-color" content="#0b5fff">
-  <!-- iOS (older than 16.4) Add to Home Screen tweaks -->
+  <meta name="theme-color" content="#000000">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
-  <meta name="apple-mobile-web-app-title" content="PWA Demo">
-  <link rel="apple-touch-icon" href="icons/icon-192.png">
+  <meta name="apple-mobile-web-app-title" content="Barber">
+  <link rel="apple-touch-icon" href="icon-192.png">
   <style>
-    :root { color-scheme: light dark; }
-    body { font-family: -apple-system, system-ui, Segoe UI, Roboto, sans-serif; margin: 0; padding: 24px; line-height: 1.4; }
-    header { font-size: 22px; font-weight: 700; margin-bottom: 8px; }
-    .card { border: 1px solid rgba(0,0,0,.15); border-radius: 12px; padding: 16px; }
-    .row { margin: 6px 0; }
-    code { background: rgba(0,0,0,.06); padding: 2px 6px; border-radius: 6px; }
+    body { font-family: -apple-system, system-ui, sans-serif; margin: 0; padding: 24px; background: #fdfdfd; color: #222; }
+    header { font-size: 22px; font-weight: bold; margin-bottom: 16px; }
+    .card { border: 1px solid #ccc; border-radius: 10px; padding: 16px; }
+    button { margin-top: 12px; padding: 10px 14px; border-radius: 8px; border: 1px solid #444; background: #000; color: #fff; }
     @media (display-mode: standalone) {
-      body { background: #f6f8ff; }
+      body { background: #f5f5f5; }
     }
-    button { padding: 10px 14px; border-radius: 10px; border: 1px solid rgba(0,0,0,.2); }
   </style>
 </head>
 <body>
-  <header>✅ PWA installabile – Demo</header>
+  <header>💈 Prenotazioni Barber</header>
   <div class="card">
-    <p class="row">Se visualizzi questa pagina con Safari su iPhone, puoi installarla come app:</p>
+    <p>Benvenuto nella PWA di prova per le prenotazioni del barbiere.</p>
+    <p>Installa questa app sulla Home del tuo iPhone per provarla offline:</p>
     <ol>
-      <li>Tap sul pulsante <strong>Condivisione</strong> in Safari.</li>
-      <li>Scegli <strong>Aggiungi alla schermata Home</strong>.</li>
-      <li>Apri l’app dalla Home e prova anche in modalità aereo: funziona offline ✅</li>
+      <li>Apri questo link in Safari.</li>
+      <li>Tocca <strong>Condividi → Aggiungi alla schermata Home</strong>.</li>
+      <li>Troverai l’icona “Barber” sulla tua Home.</li>
     </ol>
-    <p class="row">Versione cache: <code id="ver"></code></p>
-    <button id="btnPing">Prova fetch</button>
+    <button id="btnPing">Prova connessione</button>
     <p id="out"></p>
   </div>
 
   <script>
-    const CACHE_VERSION = 'v1.0.0';
-    document.getElementById('ver').textContent = CACHE_VERSION;
-
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', () => {
         navigator.serviceWorker.register('./sw.js').catch(console.error);
       });
     }
-
     document.getElementById('btnPing').addEventListener('click', async () => {
       try {
         const res = await fetch('./manifest.webmanifest', { cache: 'no-store' });
-        document.getElementById('out').textContent = 'Fetch OK (' + res.status + ') – ' + new Date().toLocaleTimeString();
+        document.getElementById('out').textContent = 'Connessione OK (' + res.status + ')';
       } catch (e) {
-        document.getElementById('out').textContent = 'Fetch fallita: ' + e.message;
+        document.getElementById('out').textContent = 'Offline – dati da cache';
       }
     });
   </script>
